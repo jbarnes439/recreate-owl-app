@@ -1,26 +1,59 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import store from './STORE';
+import Participant from './Participants';
+import Stage from './Stage';
+import Chat from './Chat';
 
-function App() {
+
+
+class App extends Component {
+  // static default props will go here.
+
+
+render() {  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <main className='App'>
+      <div className='participants'>
+        {store.inSessionArray.map(participant => (
+          <Participant 
+            key={participant.id + participant.name}
+            id={participant.id}
+            name={participant.name}
+            avatar={participant.avatar}
+            inSession={participant.inSession}
+            onStage={participant.OnStage}
+          />          
+        ))}
+      </div>
+      <div className='participants'>
+        {store.notInSessionArray.map((participant) => (
+          <Participant 
+            key={participant.id}
+            id={participant.id}
+            name={participant.name}
+            avatar={participant.avatar}
+            inSession={participant.inSession}
+            onStage={participant.OnStage}
+          />          
+        ))}
+      </div>
+      <Stage />
+      <div className='chat-box'>
+         {store.chatEvents.map(chatEvent => (
+           <Chat
+            id={chatEvent.participantId}
+            key={chatEvent.participantId}
+            type={chatEvent.type}
+            message={chatEvent.message}
+            timestamp={chatEvent.timestamp}
+            />
+         ))}        
+         
+      </div>
+    </main>
+  )
+}
 }
 
 export default App;
